@@ -1,0 +1,9 @@
+spring:
+  resources:
+    static-locations: classpath:/static
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+server:
+  edgex: localhost
+  port: 8090
