@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.ConnectException;
-
 @RequestMapping("/api/instance")
 @RestController
 public class GwInstController {
