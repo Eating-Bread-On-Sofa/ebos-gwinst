@@ -16,7 +16,7 @@ public class EbosGwinstApplication {
     @Bean
     public RestTemplate restTemplate() {
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
-        simpleClientHttpRequestFactory.setConnectTimeout(5000);
+        simpleClientHttpRequestFactory.setConnectTimeout(100);
         simpleClientHttpRequestFactory.setReadTimeout(3000);
         RestTemplate restTemplate = new RestTemplate(simpleClientHttpRequestFactory);
         return restTemplate;
