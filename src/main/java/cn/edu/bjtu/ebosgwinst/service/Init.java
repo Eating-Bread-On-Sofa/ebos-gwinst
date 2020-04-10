@@ -7,6 +7,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -56,8 +57,14 @@ public class Init implements ApplicationRunner {
                 System.out.println(reply);
                 if (reply.equals("Name already taken")) {
                     restTemplate.put(url, export);
+                    System.out.println("if");
                 }
-            }catch (Exception e){
+            }
+            catch (HttpClientErrorException.BadRequest e){
+                restTemplate.put(url, export);
+                System.out.println("catch");
+            }
+            catch (Exception e){
                 logService.error(e.getMessage());
             }
         }).start();
