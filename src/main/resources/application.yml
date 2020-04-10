@@ -12,3 +12,11 @@ spring:
 server:
   edgex: localhost
   port: 8090
+export:
+  name: gw inst export
+  ip: 172.17.0.1
+  port: 1883
+  publisher: gw inst
+  user: user
+  password: user
+  topic: edgex
