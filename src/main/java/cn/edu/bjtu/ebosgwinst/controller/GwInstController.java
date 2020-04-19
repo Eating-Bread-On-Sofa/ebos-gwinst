@@ -4,10 +4,12 @@ import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+@Api(tags = "网关实例")
 @RequestMapping("/api/instance")
 @RestController
 public class GwInstController {
