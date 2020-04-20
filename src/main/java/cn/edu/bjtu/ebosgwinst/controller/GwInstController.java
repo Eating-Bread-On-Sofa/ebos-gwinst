@@ -4,10 +4,12 @@ import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+@Api(tags = "网关实例")
 @RequestMapping("/api/instance")
 @RestController
 public class GwInstController {
@@ -95,26 +97,26 @@ public class GwInstController {
     }
 
     @CrossOrigin
-    @GetMapping("/log/info")
-    public String getLogInfo(){
-        return logService.findLogByCategory("info");
+    @GetMapping("/log/source/{source}/category/{category}")
+    public JSONArray getLogBySourceCategory(@PathVariable String source,@PathVariable String category){
+        return logService.findLogBySourceAndCategory(source,category);
+    }
+
+    @CrossOrigin
+    @GetMapping("/log/category/{category}")
+    public JSONArray getLogByCategory(@PathVariable String category){
+        return logService.findLogByCategory(category);
+    }
+
+    @CrossOrigin
+    @GetMapping("/log/source/{source}")
+    public JSONArray getLogBySource(@PathVariable String source){
+        return logService.findLogBySource(source);
     }
 
     @CrossOrigin
     @GetMapping("/log")
-    public String getLog(){
+    public JSONArray getLog(){
         return logService.findAll();
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/warn")
-    public String getLogWarn(){
-        return logService.findLogByCategory("warn");
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/error")
-    public String getLogError(){
-        return logService.findLogByCategory("error");
     }
 }
