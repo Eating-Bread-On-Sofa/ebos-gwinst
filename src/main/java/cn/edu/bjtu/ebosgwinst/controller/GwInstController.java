@@ -32,10 +32,19 @@ public class GwInstController {
     @GetMapping()
     public JSONObject getInfo() {
         JSONObject result = new JSONObject();
+        System.out.println(commandUrl);
+        System.out.println(edgeDeviceUrl);
+        System.out.println(edgeDeviceProfileUrl);
+        System.out.println(edgeDeviceServiceUrl);
+        System.out.println(edgeExportUrl);
         JSONArray commandArray = new JSONArray(restTemplate.getForObject(commandUrl, JSONArray.class));
+        System.out.println("commandArray"+commandArray);
         JSONArray deviceArr = new JSONArray(restTemplate.getForObject(edgeDeviceUrl, JSONArray.class));
+        System.out.println("deviceArr"+deviceArr);
         JSONArray deviceProfileArr = new JSONArray(restTemplate.getForObject(edgeDeviceProfileUrl, JSONArray.class));
+        System.out.println("deviceProfileArr"+deviceProfileArr);
         JSONArray deviceServiceArr = new JSONArray(restTemplate.getForObject(edgeDeviceServiceUrl, JSONArray.class));
+        System.out.println("deviceServiceArr"+deviceServiceArr);
         JSONArray exportArr = new JSONArray(restTemplate.getForObject(edgeExportUrl, JSONArray.class));
         result.put("command", commandArray);
         result.put("device", deviceArr);
