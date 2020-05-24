@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-
 @Component
 @Order(1)
 public class Init implements ApplicationRunner {
@@ -54,15 +53,11 @@ public class Init implements ApplicationRunner {
             export.put("destination","MQTT_TOPIC");
             try {
                 String reply = restTemplate.postForObject(url, export, String.class);
-                System.out.println(reply);
-                if (reply.equals("Name already taken")) {
-                    restTemplate.put(url, export);
-                    System.out.println("if");
-                }
+                logService.info("新增edgex导出层信息 id:"+reply);
             }
             catch (HttpClientErrorException.BadRequest e){
                 restTemplate.put(url, export);
-                System.out.println("catch");
+                logService.info("edgex导出层信息已按配置文件更新");
             }
             catch (Exception e){
                 logService.error(e.getMessage());

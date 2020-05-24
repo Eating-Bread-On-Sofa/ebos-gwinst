@@ -97,26 +97,26 @@ public class GwInstController {
     }
 
     @CrossOrigin
-    @GetMapping("/log/info")
-    public String getLogInfo(){
-        return logService.findLogByCategory("info");
+    @GetMapping("/log/source/{source}/category/{category}")
+    public JSONArray getLogBySourceCategory(@PathVariable String source,@PathVariable String category){
+        return logService.findLogBySourceAndCategory(source,category);
+    }
+
+    @CrossOrigin
+    @GetMapping("/log/category/{category}")
+    public JSONArray getLogByCategory(@PathVariable String category){
+        return logService.findLogByCategory(category);
+    }
+
+    @CrossOrigin
+    @GetMapping("/log/source/{source}")
+    public JSONArray getLogBySource(@PathVariable String source){
+        return logService.findLogBySource(source);
     }
 
     @CrossOrigin
     @GetMapping("/log")
-    public String getLog(){
+    public JSONArray getLog(){
         return logService.findAll();
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/warn")
-    public String getLogWarn(){
-        return logService.findLogByCategory("warn");
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/error")
-    public String getLogError(){
-        return logService.findLogByCategory("error");
     }
 }
