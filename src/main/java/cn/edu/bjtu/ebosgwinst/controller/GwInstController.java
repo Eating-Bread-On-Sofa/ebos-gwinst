@@ -32,25 +32,26 @@ public class GwInstController {
     @GetMapping()
     public JSONObject getInfo() {
         JSONObject result = new JSONObject();
-        System.out.println(commandUrl);
-        System.out.println(edgeDeviceUrl);
-        System.out.println(edgeDeviceProfileUrl);
-        System.out.println(edgeDeviceServiceUrl);
-        System.out.println(edgeExportUrl);
-        JSONArray commandArray = new JSONArray(restTemplate.getForObject(commandUrl, JSONArray.class));
-        System.out.println("commandArray"+commandArray);
-        JSONArray deviceArr = new JSONArray(restTemplate.getForObject(edgeDeviceUrl, JSONArray.class));
-        System.out.println("deviceArr"+deviceArr);
-        JSONArray deviceProfileArr = new JSONArray(restTemplate.getForObject(edgeDeviceProfileUrl, JSONArray.class));
-        System.out.println("deviceProfileArr"+deviceProfileArr);
-        JSONArray deviceServiceArr = new JSONArray(restTemplate.getForObject(edgeDeviceServiceUrl, JSONArray.class));
-        System.out.println("deviceServiceArr"+deviceServiceArr);
-        JSONArray exportArr = new JSONArray(restTemplate.getForObject(edgeExportUrl, JSONArray.class));
-        result.put("command", commandArray);
-        result.put("device", deviceArr);
-        result.put("deviceprofile", deviceProfileArr);
-        result.put("deviceservice", deviceServiceArr);
-        result.put("export", exportArr);
+        try {
+            JSONArray commandArray = new JSONArray(restTemplate.getForObject(commandUrl, JSONArray.class));
+            result.put("command", commandArray);
+        }catch (Exception ignored){}
+        try {
+            JSONArray deviceArr = new JSONArray(restTemplate.getForObject(edgeDeviceUrl, JSONArray.class));
+            result.put("device", deviceArr);
+        }catch (Exception ignored){}
+        try {
+            JSONArray deviceProfileArr = new JSONArray(restTemplate.getForObject(edgeDeviceProfileUrl, JSONArray.class));
+            result.put("deviceprofile", deviceProfileArr);
+        }catch (Exception ignored){}
+        try {
+            JSONArray deviceServiceArr = new JSONArray(restTemplate.getForObject(edgeDeviceServiceUrl, JSONArray.class));
+            result.put("deviceservice", deviceServiceArr);
+        }catch (Exception ignored){}
+        try {
+            JSONArray exportArr = new JSONArray(restTemplate.getForObject(edgeExportUrl, JSONArray.class));
+            result.put("export", exportArr);
+        }catch (Exception ignored){}
         return result;
     }
 
@@ -58,7 +59,6 @@ public class GwInstController {
     @PostMapping()
     public JSONObject putInfo(@RequestBody JSONObject info) {
         JSONArray commandArray = info.getJSONArray("command");
-        JSONArray deviceProfileArr = info.getJSONArray("deviceprofile");
         JSONArray deviceServiceArr = info.getJSONArray("deviceservice");
         JSONArray exportArr = info.getJSONArray("export");
         JSONObject result = new JSONObject();
@@ -66,7 +66,6 @@ public class GwInstController {
             String commandReply = restTemplate.postForObject(commandUrl + "/recover", commandArray, String.class);
             result.put("command", commandReply);
         }
-        result = restore.restoreEdgeX(result, deviceProfileArr, edgeDeviceProfileUrl,"deviceprofile");
         result = restore.restoreEdgeX(result, deviceServiceArr, edgeDeviceServiceUrl,"deviceservice");
         result = restore.restoreEdgeX(result, exportArr, edgeExportUrl,"export");
         return result;
