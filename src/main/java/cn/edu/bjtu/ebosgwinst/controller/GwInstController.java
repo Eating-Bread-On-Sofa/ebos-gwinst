@@ -5,9 +5,15 @@ import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Api(tags = "网关实例")
 @RequestMapping("/api/instance")
@@ -102,6 +108,28 @@ public class GwInstController {
             pong.put("edgex-core-command", "OFFLINE");
         }
         return pong;
+    }
+
+    @CrossOrigin
+    @PostMapping("/service")
+    public JSONObject postService(@RequestParam("file") MultipartFile[] multipartFiles){
+        JSONObject result = new JSONObject();
+        ApplicationHome home = new ApplicationHome(getClass());
+        File jar = home.getSource();
+        String path = jar.getParentFile().toString();
+        System.out.println("path:"+path);
+        for (MultipartFile file: multipartFiles) {
+            String name = file.getOriginalFilename();
+            System.out.println(name);
+            try {
+                FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path +File.separator + name));
+                result.put(name,"success");
+            }catch (IOException e){
+                System.out.println(e.toString());
+                result.put(name,"failed");
+            }
+        }
+        return result;
     }
 
     @CrossOrigin
