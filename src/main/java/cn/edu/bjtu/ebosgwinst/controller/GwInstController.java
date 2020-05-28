@@ -1,19 +1,15 @@
 package cn.edu.bjtu.ebosgwinst.controller;
 
+import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
-import java.io.IOException;
 
 @Api(tags = "网关实例")
 @RequestMapping("/api/instance")
@@ -25,6 +21,9 @@ public class GwInstController {
     RestTemplate restTemplate;
     @Autowired
     Restore restore;
+    @Autowired
+    FileService fileService;
+
     private static final String commandUrl = "http://localhost:8082/api/command";
     private static final String edgeDeviceUrl = "http://localhost:48081/api/v1/device";
     private static final String edgeDeviceProfileUrl = "http://localhost:48081/api/v1/deviceprofile";
@@ -113,23 +112,9 @@ public class GwInstController {
     @CrossOrigin
     @PostMapping("/service")
     public JSONObject postService(@RequestParam("file") MultipartFile[] multipartFiles){
-        JSONObject result = new JSONObject();
-        ApplicationHome home = new ApplicationHome(getClass());
-        File jar = home.getSource();
-        String path = jar.getParentFile().toString();
-        System.out.println("path:"+path);
-        for (MultipartFile file: multipartFiles) {
-            String name = file.getOriginalFilename();
-            System.out.println(name);
-            try {
-                FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path +File.separator + name));
-                result.put(name,"success");
-            }catch (IOException e){
-                System.out.println(e.toString());
-                result.put(name,"failed");
-            }
-        }
-        return result;
+        String path = fileService.getThisJarPath();
+        System.out.println("存储路径:"+path);
+        return fileService.saveFiles(multipartFiles, path);
     }
 
     @CrossOrigin
