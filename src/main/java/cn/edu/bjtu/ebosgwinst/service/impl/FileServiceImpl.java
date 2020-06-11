@@ -15,8 +15,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Iterator;
 
 @Service
@@ -82,5 +81,46 @@ public class FileServiceImpl implements FileService {
             res.put("error",e.getMessage());
             return res;
         }
+    }
+
+    @Override
+    public void execJar(String name){
+        new Thread(() -> {
+            try {
+                String[] commands = {"java", "-Xmx100m", "-Xss256k", "-jar", name};
+                Process process = Runtime.getRuntime().exec(commands,null,new File(getThisJarPath()));
+                InputStream inputStream = process.getInputStream();
+                InputStream inputStream1 = process.getErrorStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream1));
+                String line=null;
+                String line1 = null;
+                new Thread(){}.start();
+                while(( line = bufferedReader.readLine() )!=null || ( line1 = bufferedReader1.readLine() )!=null) {
+                    if (line != null) {
+                        System.out.println(line);
+                    } else {
+                        System.out.println(line1);
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    @Override
+    public void killProcessByPort(int port){
+        try {
+            Process process = Runtime.getRuntime().exec("lsof -ti:"+port);
+            InputStream inputStream = process.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            Process process1 = Runtime.getRuntime().exec("kill "+bufferedReader.readLine());
+            bufferedReader.close();
+            process.waitFor();
+            process.destroy();
+            process1.waitFor();
+            process1.destroy();
+        }catch (Exception ignored){}
     }
 }
