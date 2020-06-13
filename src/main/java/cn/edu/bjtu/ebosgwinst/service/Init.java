@@ -53,14 +53,14 @@ public class Init implements ApplicationRunner {
             export.put("destination","MQTT_TOPIC");
             try {
                 String reply = restTemplate.postForObject(url, export, String.class);
-                logService.info("新增edgex导出层信息 id:"+reply);
+                logService.info(null,"新增edgex导出层信息 id:"+reply);
             }
             catch (HttpClientErrorException.BadRequest e){
                 restTemplate.put(url, export);
-                logService.info("edgex导出层信息已按配置文件更新");
+                logService.info(null,"edgex导出层信息已按配置文件更新");
             }
             catch (Exception e){
-                logService.error(e.getMessage());
+                logService.error(null,e.getMessage());
             }
         }).start();
     }
