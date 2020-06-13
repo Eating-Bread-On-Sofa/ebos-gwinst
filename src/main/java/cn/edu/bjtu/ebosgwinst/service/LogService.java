@@ -3,6 +3,8 @@ package cn.edu.bjtu.ebosgwinst.service;
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public interface LogService {
     void debug(String message);
@@ -13,13 +15,24 @@ public interface LogService {
 
     void error(String message);
 
+    void create(String message);
+
+    void delete(String message);
+
+    void update(String message);
+
+    void retrieve(String message);
+
     String getTop();
 
-    JSONArray findLogByCategory(String category);
-
     JSONArray findAll();
+
+    JSONArray find(Date startDate, Date endDate, String source, String category, String function);
+
+    JSONArray findLogByCategory(String category);
 
     JSONArray findLogBySource(String source);
 
     JSONArray findLogBySourceAndCategory(String source, String category);
+
 }
