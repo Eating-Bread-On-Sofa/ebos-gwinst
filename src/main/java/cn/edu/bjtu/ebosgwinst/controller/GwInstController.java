@@ -110,11 +110,30 @@ public class GwInstController {
     }
 
     @CrossOrigin
+    @GetMapping("/service")
+    public JSONArray inquireService(){
+        String path = fileService.getThisJarPath();
+        return fileService.getFileList(path,new String[]{"jar"});
+    }
+
+    @CrossOrigin
     @PostMapping("/service")
     public JSONObject postService(@RequestParam("file") MultipartFile[] multipartFiles){
         String path = fileService.getThisJarPath();
         System.out.println("存储路径:"+path);
         return fileService.saveFiles(multipartFiles, path);
+    }
+
+    @CrossOrigin
+    @PutMapping("/service")
+    public void startService(@RequestParam String jarName){
+        fileService.execJar(jarName);
+    }
+
+    @CrossOrigin
+    @DeleteMapping("/service")
+    public void killService(@RequestParam int port){
+        fileService.killProcessByPort(port);
     }
 
     @CrossOrigin

@@ -9,4 +9,6 @@ public interface FileService {
     JSONObject saveFiles(MultipartFile[] multipartFiles, String path);
     JSONArray getFileList(String path, String[] extensions);
     JSONObject sendFiles(String url, String path, String[] names);
+    void execJar(String name);
+    void killProcessByPort(int port);
 }
