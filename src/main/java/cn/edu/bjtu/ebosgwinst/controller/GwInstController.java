@@ -1,5 +1,6 @@
 package cn.edu.bjtu.ebosgwinst.controller;
 
+import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Api(tags = "网关实例")
 @RequestMapping("/api/instance")
@@ -138,25 +141,25 @@ public class GwInstController {
 
     @CrossOrigin
     @GetMapping("/log/source/{source}/category/{category}")
-    public JSONArray getLogBySourceCategory(@PathVariable String source,@PathVariable String category){
+    public List<Log> getLogBySourceCategory(@PathVariable String source, @PathVariable String category){
         return logService.findLogBySourceAndCategory(source,category);
     }
 
     @CrossOrigin
     @GetMapping("/log/category/{category}")
-    public JSONArray getLogByCategory(@PathVariable String category){
+    public List<Log> getLogByCategory(@PathVariable String category){
         return logService.findLogByCategory(category);
     }
 
     @CrossOrigin
     @GetMapping("/log/source/{source}")
-    public JSONArray getLogBySource(@PathVariable String source){
+    public List<Log> getLogBySource(@PathVariable String source){
         return logService.findLogBySource(source);
     }
 
     @CrossOrigin
     @GetMapping("/log")
-    public JSONArray getLog(){
+    public List<Log> getLog(){
         return logService.findAll();
     }
 }

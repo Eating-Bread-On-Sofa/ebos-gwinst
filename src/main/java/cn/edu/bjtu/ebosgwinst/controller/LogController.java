@@ -1,14 +1,18 @@
 package cn.edu.bjtu.ebosgwinst.controller;
 
+import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import com.alibaba.fastjson.JSONArray;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
+@Api(tags = "日志")
 @RequestMapping("/api")
 @RestController
 public class LogController {
@@ -16,7 +20,7 @@ public class LogController {
     LogService logService;
 
     @CrossOrigin
-    @RequestMapping ("/logtest")
+    @PostMapping ("/logtest")
     public String logTest(){
         logService.debug("create","gwinst1");
         logService.info("delete","gwinst2");
@@ -31,13 +35,13 @@ public class LogController {
 
     @CrossOrigin
     @GetMapping("/logtest")
-    public JSONArray loggerTest(){
+    public List<Log> loggerTest(){
         return logService.findAll();
     }
 
     @CrossOrigin
     @RequestMapping(value = "/log",method = RequestMethod.GET)
-    public JSONArray logTest(Date firstDate, Date lastDate, String source, String category,String operation) throws ParseException {
+    public List<Log> getLog(Date firstDate, Date lastDate, String source, String category, String operation) throws ParseException {
         SimpleDateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat ds =  new SimpleDateFormat("yyyy-MM-dd ");
         Date startDate = df.parse(ds.format(firstDate)+"00:00:00");
