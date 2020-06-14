@@ -81,7 +81,7 @@ public class GwInstController {
 
     @CrossOrigin
     @GetMapping("/state")
-    public JSONObject ping() {
+    public JSONObject getState() {
         //THIS METHOD IS WAITING TO BE OPTIMIZED, BUT ALL THE PARAMETER WON'T CHANGE.
         JSONObject pong = new JSONObject();
         pong.put("gateway-instance", "ONLINE");
@@ -137,6 +137,12 @@ public class GwInstController {
     @DeleteMapping("/service")
     public void killService(@RequestParam int port){
         fileService.killProcessByPort(port);
+    }
+
+    @CrossOrigin
+    @GetMapping("/ping")
+    public String ping(){
+        return "pong";
     }
 
     @CrossOrigin
