@@ -1,9 +1,9 @@
 package cn.edu.bjtu.ebosgwinst.service.impl;
 
+import cn.edu.bjtu.ebosgwinst.entity.FileDescriptor;
+import cn.edu.bjtu.ebosgwinst.entity.FileSavingMsg;
 import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -33,53 +36,55 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public JSONObject saveFiles(MultipartFile[] multipartFiles, String path){
-        JSONObject result = new JSONObject();
+    public List<FileSavingMsg> saveFiles(MultipartFile[] multipartFiles, String path){
+        List<FileSavingMsg> fileSavingMsgs = new LinkedList<>();
         for (MultipartFile file: multipartFiles) {
             String name = file.getOriginalFilename();
             try {
                 FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path +File.separator + name));
-                result.put(name,"success");
-                System.out.println(name+"success");
+                FileSavingMsg fileSavingMsg = new FileSavingMsg(name,"success",true);
+                logService.info("save",fileSavingMsg.toString());
+                fileSavingMsgs.add(fileSavingMsg);
             }catch (IOException e){
                 System.out.println(e.toString());
-                result.put(name,"fail-"+e.getMessage());
-                System.out.println(name+"fail");
+                FileSavingMsg fileSavingMsg = new FileSavingMsg(name,e.getMessage(),false);
+                logService.info("save",fileSavingMsg.toString());
+                fileSavingMsgs.add(fileSavingMsg);
             }
         }
-        return result;
+        return fileSavingMsgs;
     }
 
     @Override
-    public JSONArray getFileList(String path, String[] extensions){
-        JSONArray res = new JSONArray();
+    public List<FileDescriptor> getFileList(String path, String[] extensions){
+        List<FileDescriptor> fileDescriptors = new LinkedList<>();
         File dir = new File(path);
         Iterator<File> fileIterator = FileUtils.iterateFiles(dir,extensions,true);
         while (fileIterator.hasNext()){
             File file = fileIterator.next();
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("name",file.getName());
-            jsonObject.put("extension", FilenameUtils.getExtension(file.getName()));
-            res.add(jsonObject);
+            FileDescriptor fileDescriptor = new FileDescriptor(file.getName(),FilenameUtils.getExtension(file.getName()));
+            fileDescriptors.add(fileDescriptor);
         }
-        return res;
+        return fileDescriptors;
     }
 
     @Override
-    public JSONObject sendFiles(String url, String path, String[] names){
+    public List<FileSavingMsg> sendFiles(String url, String path, String[] names){
         MultiValueMap<String, Object> paramMap = new LinkedMultiValueMap<>();
         for (String name:names) {
             FileSystemResource fileSystemResource = new FileSystemResource(path+File.separator+name);
             paramMap.add("file", fileSystemResource);
         }
-        System.out.println(paramMap);
         try {
-            return restTemplate.postForObject(url, paramMap, JSONObject.class);
+            @SuppressWarnings("unchecked")
+            List<FileSavingMsg> fileSavingMsgs = restTemplate.postForObject(url, paramMap, List.class);
+            return fileSavingMsgs;
         }catch (Exception e){
             e.printStackTrace();
-            JSONObject res = new JSONObject();
-            res.put("error",e.getMessage());
-            return res;
+            FileSavingMsg fileSavingMsg = new FileSavingMsg(Arrays.toString(names),e.getMessage(),false);
+            List<FileSavingMsg> fileSavingMsgs = new LinkedList<>();
+            fileSavingMsgs.add(fileSavingMsg);
+            return fileSavingMsgs;
         }
     }
 

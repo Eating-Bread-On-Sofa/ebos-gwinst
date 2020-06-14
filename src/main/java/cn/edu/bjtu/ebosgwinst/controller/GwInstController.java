@@ -1,12 +1,15 @@
 package cn.edu.bjtu.ebosgwinst.controller;
 
-import cn.edu.bjtu.ebosgwinst.entity.Log;
+import cn.edu.bjtu.ebosgwinst.entity.FileDescriptor;
+import cn.edu.bjtu.ebosgwinst.entity.FileSavingMsg;
+import cn.edu.bjtu.ebosgwinst.entity.GwServState;
 import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -36,6 +39,7 @@ public class GwInstController {
     private static final String edgeCoreDataPing = "http://localhost:48080/api/v1/ping";
     private static final String edgeCoreMetaDataPing = "http://localhost:48081/api/v1/ping";
 
+    @ApiOperation(value = "从网关备份数据", notes = "数据格式请试试，很多数据来源是edgex，后端没有对应实体")
     @CrossOrigin
     @GetMapping()
     public JSONObject getInfo() {
@@ -63,6 +67,7 @@ public class GwInstController {
         return result;
     }
 
+    @ApiOperation(value = "向网关恢复数据", notes = "数据格式请参考备份API返回值，很多数据来源是edgex，后端没有对应实体")
     @CrossOrigin
     @PostMapping()
     public JSONObject putInfo(@RequestBody JSONObject info) {
@@ -81,47 +86,42 @@ public class GwInstController {
 
     @CrossOrigin
     @GetMapping("/state")
-    public JSONObject getState() {
+    public GwServState getState() {
         //THIS METHOD IS WAITING TO BE OPTIMIZED, BUT ALL THE PARAMETER WON'T CHANGE.
-        JSONObject pong = new JSONObject();
-        pong.put("gateway-instance", "ONLINE");
+        GwServState gwServState = new GwServState();
         try {
             restTemplate.getForObject(commandUrl + "/ping", String.class);
-            pong.put("command", "ONLINE");
-        } catch (Exception e) {
-            pong.put("command", "OFFLINE");
+            gwServState.setCommand(true);
+        } catch (Exception ignored) {
         }
         try {
             restTemplate.getForObject(edgeCoreDataPing, String.class);
-            pong.put("edgex-core-data", "ONLINE");
-        } catch (Exception e) {
-            pong.put("edgex-core-data", "OFFLINE");
+            gwServState.setEdgexCoreData(true);
+        } catch (Exception ignored) {
         }
         try {
             restTemplate.getForObject(edgeCoreMetaDataPing, String.class);
-            pong.put("edgex-core-metadata", "ONLINE");
-        } catch (Exception e) {
-            pong.put("edgex-core-metadata", "OFFLINE");
+            gwServState.setEdgexCoreMetadata(true);
+        } catch (Exception ignored) {
         }
         try {
             restTemplate.getForObject(edgeCoreCommandPing, String.class);
-            pong.put("edgex-core-command", "ONLINE");
-        } catch (Exception e) {
-            pong.put("edgex-core-command", "OFFLINE");
+            gwServState.setEdgexCoreCommand(true);
+        } catch (Exception ignored) {
         }
-        return pong;
+        return gwServState;
     }
 
     @CrossOrigin
     @GetMapping("/service")
-    public JSONArray inquireService(){
+    public List<FileDescriptor> inquireService(){
         String path = fileService.getThisJarPath();
         return fileService.getFileList(path,new String[]{"jar"});
     }
 
     @CrossOrigin
     @PostMapping("/service")
-    public JSONObject postService(@RequestParam("file") MultipartFile[] multipartFiles){
+    public List<FileSavingMsg> postService(@RequestParam("file") MultipartFile[] multipartFiles){
         String path = fileService.getThisJarPath();
         System.out.println("存储路径:"+path);
         return fileService.saveFiles(multipartFiles, path);
@@ -143,29 +143,5 @@ public class GwInstController {
     @GetMapping("/ping")
     public String ping(){
         return "pong";
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/source/{source}/category/{category}")
-    public List<Log> getLogBySourceCategory(@PathVariable String source, @PathVariable String category){
-        return logService.findLogBySourceAndCategory(source,category);
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/category/{category}")
-    public List<Log> getLogByCategory(@PathVariable String category){
-        return logService.findLogByCategory(category);
-    }
-
-    @CrossOrigin
-    @GetMapping("/log/source/{source}")
-    public List<Log> getLogBySource(@PathVariable String source){
-        return logService.findLogBySource(source);
-    }
-
-    @CrossOrigin
-    @GetMapping("/log")
-    public List<Log> getLog(){
-        return logService.findAll();
     }
 }
