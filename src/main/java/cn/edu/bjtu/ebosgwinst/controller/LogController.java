@@ -4,6 +4,7 @@ import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import com.alibaba.fastjson.JSONArray;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ public class LogController {
     @Autowired
     LogService logService;
 
+    @ApiOperation(value = "测试用API", notes = "写一堆乱七八糟的日志进去")
     @CrossOrigin
     @PostMapping ("/logtest")
     public String logTest(){
@@ -33,12 +35,14 @@ public class LogController {
         return "成功";
     }
 
+    @ApiOperation(value = "测试用API", notes = "返回所有日志，爆卡警告")
     @CrossOrigin
     @GetMapping("/logtest")
     public List<Log> loggerTest(){
         return logService.findAll();
     }
 
+    @ApiOperation(value = "按条件筛选日志")
     @CrossOrigin
     @RequestMapping(value = "/log",method = RequestMethod.GET)
     public List<Log> getLog(Date firstDate, Date lastDate, String source, String category, String operation) throws ParseException {

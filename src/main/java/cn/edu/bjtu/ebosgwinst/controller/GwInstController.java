@@ -85,6 +85,7 @@ public class GwInstController {
         return result;
     }
 
+    @ApiOperation(value = "查看指定网关微服务运行状态")
     @CrossOrigin
     @GetMapping("/state")
     public GwServState getState() {
@@ -113,6 +114,7 @@ public class GwInstController {
         return gwServState;
     }
 
+    @ApiOperation(value = "查看指定网关所部署的微服务")
     @CrossOrigin
     @GetMapping("/service")
     public List<FileDescriptor> inquireService(){
@@ -120,6 +122,7 @@ public class GwInstController {
         return fileService.getFileList(path,new String[]{"jar"});
     }
 
+    @ApiOperation(value = "接收下发微服务")
     @CrossOrigin
     @PostMapping("/service")
     public List<FileSavingMsg> postService(@RequestParam("file") MultipartFile[] multipartFiles){
@@ -128,18 +131,21 @@ public class GwInstController {
         return fileService.saveFiles(multipartFiles, path);
     }
 
+    @ApiOperation(value = "启动指定微服务")
     @CrossOrigin
     @PutMapping("/service")
     public void startService(@RequestParam String jarName){
         fileService.execJar(jarName);
     }
 
+    @ApiOperation(value = "停止指定微服务")
     @CrossOrigin
     @DeleteMapping("/service")
     public void killService(@RequestParam int port){
         fileService.killProcessByPort(port);
     }
 
+    @ApiOperation(value = "微服务健康检测")
     @CrossOrigin
     @GetMapping("/ping")
     public String ping(){

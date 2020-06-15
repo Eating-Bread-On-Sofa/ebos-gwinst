@@ -25,7 +25,7 @@ public class RestoreService implements Restore {
                     } catch (HttpClientErrorException.NotFound e) {
                         restTemplate.postForObject(url, jsonObject, String.class);
                     }
-                    reply.put(jsonObject.getString("name"), "done");
+                    reply.put(jsonObject.getString("name"), "完成");
                 } catch (Exception e) {
                     reply.put(jsonObject.getString("name"), e.toString());
                 }
