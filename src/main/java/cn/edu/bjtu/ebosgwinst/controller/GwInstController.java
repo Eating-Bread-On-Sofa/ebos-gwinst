@@ -1,8 +1,9 @@
 package cn.edu.bjtu.ebosgwinst.controller;
 
-import cn.edu.bjtu.ebosgwinst.entity.FileDescriptor;
-import cn.edu.bjtu.ebosgwinst.entity.FileSavingMsg;
-import cn.edu.bjtu.ebosgwinst.entity.GwServState;
+import cn.edu.bjtu.ebosgwinst.model.FileDescriptor;
+import cn.edu.bjtu.ebosgwinst.model.FileSavingMsg;
+import cn.edu.bjtu.ebosgwinst.model.GwBackupInfo;
+import cn.edu.bjtu.ebosgwinst.model.GwServState;
 import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
@@ -39,48 +40,48 @@ public class GwInstController {
     private static final String edgeCoreDataPing = "http://localhost:48080/api/v1/ping";
     private static final String edgeCoreMetaDataPing = "http://localhost:48081/api/v1/ping";
 
-    @ApiOperation(value = "从网关备份数据", notes = "数据格式请试试，很多数据来源是edgex，后端没有对应实体")
+    @ApiOperation(value = "从网关备份数据", notes = "每项字段具体内容，请参考相应微服务或edgex")
     @CrossOrigin
     @GetMapping()
-    public JSONObject getInfo() {
-        JSONObject result = new JSONObject();
+    public GwBackupInfo getInfo() {
+        GwBackupInfo gwBackupInfo = new GwBackupInfo();
         try {
             JSONArray commandArray = new JSONArray(restTemplate.getForObject(commandUrl, JSONArray.class));
-            result.put("command", commandArray);
+            gwBackupInfo.setCommand(commandArray);
         }catch (Exception ignored){}
         try {
             JSONArray deviceArr = new JSONArray(restTemplate.getForObject(edgeDeviceUrl, JSONArray.class));
-            result.put("device", deviceArr);
+            gwBackupInfo.setEdgeXDevice(deviceArr);
         }catch (Exception ignored){}
         try {
             JSONArray deviceProfileArr = new JSONArray(restTemplate.getForObject(edgeDeviceProfileUrl, JSONArray.class));
-            result.put("deviceprofile", deviceProfileArr);
+            gwBackupInfo.setEdgeXProfile(deviceProfileArr);
         }catch (Exception ignored){}
         try {
             JSONArray deviceServiceArr = new JSONArray(restTemplate.getForObject(edgeDeviceServiceUrl, JSONArray.class));
-            result.put("deviceservice", deviceServiceArr);
+            gwBackupInfo.setEdgeXService(deviceServiceArr);
         }catch (Exception ignored){}
         try {
             JSONArray exportArr = new JSONArray(restTemplate.getForObject(edgeExportUrl, JSONArray.class));
-            result.put("export", exportArr);
+            gwBackupInfo.setEdgeXExport(exportArr);
         }catch (Exception ignored){}
-        return result;
+        return gwBackupInfo;
     }
 
-    @ApiOperation(value = "向网关恢复数据", notes = "数据格式请参考备份API返回值，很多数据来源是edgex，后端没有对应实体")
+    @ApiOperation(value = "向网关恢复数据", notes = "每项字段具体内容，请参考相应微服务或edgex")
     @CrossOrigin
     @PostMapping()
-    public JSONObject putInfo(@RequestBody JSONObject info) {
-        JSONArray commandArray = info.getJSONArray("command");
-        JSONArray deviceServiceArr = info.getJSONArray("deviceservice");
-        JSONArray exportArr = info.getJSONArray("export");
+    public JSONObject putInfo(@RequestBody GwBackupInfo gwBackupInfo) {
+        JSONArray commandArray = gwBackupInfo.getCommand();
+        JSONArray deviceServiceArr = gwBackupInfo.getEdgeXService();
+        JSONArray exportArr = gwBackupInfo.getEdgeXExport();
         JSONObject result = new JSONObject();
         if (commandArray != null) {
             String commandReply = restTemplate.postForObject(commandUrl + "/recover", commandArray, String.class);
             result.put("command", commandReply);
         }
-        result = restore.restoreEdgeX(result, deviceServiceArr, edgeDeviceServiceUrl,"deviceservice");
-        result = restore.restoreEdgeX(result, exportArr, edgeExportUrl,"export");
+        result = restore.restoreEdgeX(result, deviceServiceArr, edgeDeviceServiceUrl,"edgeXService");
+        result = restore.restoreEdgeX(result, exportArr, edgeExportUrl,"edgeXExport");
         return result;
     }
 

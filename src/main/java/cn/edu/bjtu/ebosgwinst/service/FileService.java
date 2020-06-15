@@ -1,7 +1,7 @@
 package cn.edu.bjtu.ebosgwinst.service;
 
-import cn.edu.bjtu.ebosgwinst.entity.FileDescriptor;
-import cn.edu.bjtu.ebosgwinst.entity.FileSavingMsg;
+import cn.edu.bjtu.ebosgwinst.model.FileDescriptor;
+import cn.edu.bjtu.ebosgwinst.model.FileSavingMsg;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

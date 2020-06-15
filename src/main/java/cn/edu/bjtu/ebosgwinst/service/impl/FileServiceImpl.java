@@ -1,7 +1,7 @@
 package cn.edu.bjtu.ebosgwinst.service.impl;
 
-import cn.edu.bjtu.ebosgwinst.entity.FileDescriptor;
-import cn.edu.bjtu.ebosgwinst.entity.FileSavingMsg;
+import cn.edu.bjtu.ebosgwinst.model.FileDescriptor;
+import cn.edu.bjtu.ebosgwinst.model.FileSavingMsg;
 import cn.edu.bjtu.ebosgwinst.service.FileService;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import org.apache.commons.io.FileUtils;

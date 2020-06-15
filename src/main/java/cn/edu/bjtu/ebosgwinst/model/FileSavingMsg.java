@@ -1,4 +1,4 @@
-package cn.edu.bjtu.ebosgwinst.entity;
+package cn.edu.bjtu.ebosgwinst.model;
 
 public class FileSavingMsg {
     private String FileName;
