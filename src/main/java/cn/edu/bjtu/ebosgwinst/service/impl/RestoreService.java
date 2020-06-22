@@ -1,5 +1,6 @@
 package cn.edu.bjtu.ebosgwinst.service.impl;
 
+import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.Restore;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -12,6 +13,8 @@ import org.springframework.web.client.RestTemplate;
 public class RestoreService implements Restore {
     @Autowired
     RestTemplate restTemplate;
+    @Autowired
+    LogService logService;
 
     @Override
     public JSONObject restoreEdgeX(JSONObject result, JSONArray jsonArray, String url,String key) {
@@ -27,7 +30,8 @@ public class RestoreService implements Restore {
                     }
                     reply.put(jsonObject.getString("name"), "完成");
                 } catch (Exception e) {
-                    reply.put(jsonObject.getString("name"), e.toString());
+                    logService.error(null,e.toString());
+                    reply.put(jsonObject.getString("name"), "失败");
                 }
             }
             result.put(key,reply);
