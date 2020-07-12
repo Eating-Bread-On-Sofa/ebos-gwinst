@@ -22,6 +22,8 @@ public interface LogService {
 
     List<Log> find(Date startDate, Date endDate, String source, String category, String operation);
 
+    List<Log> findRecent();
+
     List<Log> findLogByCategory(String category);
 
     List<Log> findLogBySource(String source);

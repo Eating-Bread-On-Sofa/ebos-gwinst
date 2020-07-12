@@ -37,9 +37,16 @@ public class LogController {
 
     @ApiOperation(value = "测试用API", notes = "返回所有日志，爆卡警告")
     @CrossOrigin
-    @GetMapping("/logtest")
+    @GetMapping("/logFindAll")
     public List<Log> loggerTest(){
         return logService.findAll();
+    }
+
+    @ApiOperation(value = "显示最近100条日志", notes = "前端每次刚打开日志界面调用")
+    @CrossOrigin
+    @GetMapping("/logRecent")
+    public List<Log> getRecentLog(){
+        return logService.findRecent();
     }
 
     @ApiOperation(value = "按条件筛选日志")

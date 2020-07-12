@@ -3,6 +3,8 @@ package cn.edu.bjtu.ebosgwinst.service.impl;
 import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -15,6 +17,7 @@ import java.util.List;
 public class LogServiceImpl implements LogService {
 
     private static String serviceName = "网关实例";
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
@@ -76,6 +79,13 @@ public class LogServiceImpl implements LogService {
     @Override
     public List<Log> findAll() {
         return mongoTemplate.findAll(Log.class,"log");
+    }
+
+    @Override
+    public List<Log> findRecent() {
+        Query query = new Query();
+        query.with(Sort.by(Sort.Order.desc("date"))).limit(100);
+        return mongoTemplate.find(query,Log.class,"log");
     }
 
     @Override
