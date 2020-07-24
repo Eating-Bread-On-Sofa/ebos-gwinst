@@ -100,7 +100,6 @@ public class FileServiceImpl implements FileService {
                 BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(inputStream1));
                 String line=null;
                 String line1 = null;
-                new Thread(){}.start();
                 while(( line = bufferedReader.readLine() )!=null || ( line1 = bufferedReader1.readLine() )!=null) {
                     if (line != null) {
                         System.out.println(line);
