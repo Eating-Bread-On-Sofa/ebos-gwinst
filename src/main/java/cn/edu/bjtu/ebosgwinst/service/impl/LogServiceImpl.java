@@ -3,7 +3,6 @@ package cn.edu.bjtu.ebosgwinst.service.impl;
 import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -227,7 +226,6 @@ public class LogServiceImpl implements LogService {
     public List<Log> findLogBySourceAndOperation(String source, String operation) {
         Query query = Query.query(Criteria.where("source").is(source).and("operation").is(operation));
         return mongoTemplate.find(query , Log.class,"log");
-
     }
 
     public String getTop() {

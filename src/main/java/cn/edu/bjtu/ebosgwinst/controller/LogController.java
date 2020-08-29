@@ -2,7 +2,6 @@ package cn.edu.bjtu.ebosgwinst.controller;
 
 import cn.edu.bjtu.ebosgwinst.entity.Log;
 import cn.edu.bjtu.ebosgwinst.service.LogService;
-import com.alibaba.fastjson.JSONArray;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

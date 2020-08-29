@@ -9,6 +9,17 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  activemq:
+    broker-url: tcp://localhost:61616
+    user: admin
+    password: admin
+  kafka:
+    producer:
+      bootstrap-servers: 127.0.0.1:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: 127.0.0.1:9092
   servlet:
     multipart:
       max-file-size: 100MB
@@ -16,6 +27,7 @@ spring:
 server:
   edgex: localhost
   port: 8090
+mq: activemq
 export:
   name: gw inst export
   ip: 127.0.0.1

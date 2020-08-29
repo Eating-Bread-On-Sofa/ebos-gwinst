@@ -1,6 +1,5 @@
 package cn.edu.bjtu.ebosgwinst.model;
 
-
 public class GwServState {
     private Boolean command;
     private Boolean gatewayInstance;
