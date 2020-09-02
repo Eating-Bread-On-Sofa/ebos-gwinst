@@ -56,6 +56,7 @@ public class LogController {
         SimpleDateFormat ds =  new SimpleDateFormat("yyyy-MM-dd ");
         Date startDate = df.parse(ds.format(firstDate)+"00:00:00");
         Date endDate = df.parse(ds.format(lastDate)+"23:59:59");
+        logService.info("retrieve","根据起始日期"+firstDate+",终止日期"+lastDate+"，查询微服务"+source+"日志等级为"+category+"且操作为"+operation+"的本地运维日志");
         return logService.find(startDate, endDate, source, category,operation);
     }
 }

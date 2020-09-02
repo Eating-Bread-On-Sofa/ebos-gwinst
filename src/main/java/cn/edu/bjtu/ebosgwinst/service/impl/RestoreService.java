@@ -30,7 +30,7 @@ public class RestoreService implements Restore {
                     }
                     reply.put(jsonObject.getString("name"), "完成");
                 } catch (Exception e) {
-                    logService.error(null,e.toString());
+                    logService.error("update",e.toString());
                     reply.put(jsonObject.getString("name"), "失败");
                 }
             }

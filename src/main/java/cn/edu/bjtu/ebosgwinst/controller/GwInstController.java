@@ -74,6 +74,7 @@ public class GwInstController {
             JSONArray exportArr = new JSONArray(restTemplate.getForObject(edgeExportUrl, JSONArray.class));
             gwBackupInfo.setEdgeXExport(exportArr);
         }catch (Exception ignored){}
+        logService.info( "retrieve","查看本网关命令信息、设备信息、设备模板信息、设备服务信息以及导出地址信息");
         return gwBackupInfo;
     }
 
@@ -91,6 +92,7 @@ public class GwInstController {
         }
         result = restore.restoreEdgeX(result, deviceServiceArr, edgeDeviceServiceUrl,"edgeXService");
         result = restore.restoreEdgeX(result, exportArr, edgeExportUrl,"edgeXExport");
+        logService.info("update","复原本网关之前的设备命令、设备服务和导出地址信息");
         return result;
     }
 
@@ -120,6 +122,7 @@ public class GwInstController {
             gwServState.setEdgexCoreCommand(true);
         } catch (Exception ignored) {
         }
+        logService.info("retrieve","检测指令管理、edgex核心数据微服务、edgex元数据微服务以及edgex核心命令微服务的运行状况");
         return gwServState;
     }
 
@@ -137,6 +140,7 @@ public class GwInstController {
     public List<FileSavingMsg> postService(@RequestParam("file") MultipartFile[] multipartFiles){
         String path = fileService.getThisJarPath();
         System.out.println("存储路径:"+path);
+        logService.info("create","本网关成功接收了下发的微服务");
         return fileService.saveFiles(multipartFiles, path);
     }
 
@@ -145,6 +149,7 @@ public class GwInstController {
     @PutMapping("/service")
     public void startService(@RequestParam String jarName){
         fileService.execJar(jarName);
+        logService.info("update","本网关启动了微服务"+jarName);
     }
 
     @ApiOperation(value = "停止指定微服务")
@@ -152,6 +157,7 @@ public class GwInstController {
     @DeleteMapping("/service")
     public void killService(@RequestParam int port){
         fileService.killProcessByPort(port);
+        logService.info("update","本网关终止了端口为"+port+"的微服务的运行");
     }
 
     @ApiOperation(value = "微服务订阅mq的主题")
@@ -163,13 +169,15 @@ public class GwInstController {
                 status.add(rawSubscribe);
                 subscribeService.save(rawSubscribe.getSubTopic());
                 threadPoolExecutor.execute(rawSubscribe);
-                logService.info(null,"设备管理微服务订阅topic：" + rawSubscribe.getSubTopic());
+                logService.info("create","网关实例成功订阅主题"+ rawSubscribe.getSubTopic());
                 return "订阅成功";
             }catch (Exception e) {
                 e.printStackTrace();
+                logService.error("create","网关实例订阅主题"+rawSubscribe.getSubTopic()+"时，参数设定有误。");
                 return "参数错误!";
             }
         }else {
+            logService.error("create","网关实例已订阅主题"+rawSubscribe.getSubTopic()+",再次订阅失败");
             return "订阅主题重复";
         }
     }
@@ -193,7 +201,6 @@ public class GwInstController {
         synchronized (status){
             flag = status.remove(search(subTopic));
         }
-        logService.info(null,"删除设备管理上topic为"+subTopic+"的订阅");
         return flag;
     }
 
@@ -219,6 +226,7 @@ public class GwInstController {
     @CrossOrigin
     @GetMapping("/ping")
     public String ping(){
+        logService.info("retrieve","对网关实例进行了一次健康检测");
         return "pong";
     }
 }

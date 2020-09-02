@@ -43,12 +43,12 @@ public class FileServiceImpl implements FileService {
             try {
                 FileUtils.copyInputStreamToFile(file.getInputStream(), new File(path +File.separator + name));
                 FileSavingMsg fileSavingMsg = new FileSavingMsg(name,"success",true);
-                logService.info("save",fileSavingMsg.toString());
+                logService.info("create",fileSavingMsg.toString());
                 fileSavingMsgs.add(fileSavingMsg);
             }catch (IOException e){
                 System.out.println(e.toString());
                 FileSavingMsg fileSavingMsg = new FileSavingMsg(name,e.getMessage(),false);
-                logService.info("save",fileSavingMsg.toString());
+                logService.info("create",fileSavingMsg.toString());
                 fileSavingMsgs.add(fileSavingMsg);
             }
         }
