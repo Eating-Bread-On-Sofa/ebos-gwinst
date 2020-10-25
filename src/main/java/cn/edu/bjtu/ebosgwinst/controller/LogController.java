@@ -50,14 +50,14 @@ public class LogController {
 
     @ApiOperation(value = "按条件筛选日志")
     @CrossOrigin
-    @RequestMapping(value = "/log",method = RequestMethod.GET)
+    @RequestMapping(value = "/log/{firstDate}/{lastDate}/{source}/{category}/{operation}",method = RequestMethod.GET)
     public List<Log> getLog(@PathVariable Date firstDate, @PathVariable Date lastDate, @PathVariable String source, @PathVariable String category, @PathVariable String operation) throws ParseException {
         SimpleDateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat ds =  new SimpleDateFormat("yyyy-MM-dd ");
         Date startDate = df.parse(ds.format(firstDate)+"00:00:00");
         Date endDate = df.parse(ds.format(lastDate)+"23:59:59");
-        logService.info("retrieve","根据起始日期"+firstDate+",终止日期"+lastDate+"，查询微服务"+source+"日志等级为"+category+"且操作为"+operation+"的本地运维日志");
-        return logService.find(startDate, endDate, source, category,operation);
+        logService.info("retrieve","根据起始日期"+firstDate+",终止日期"+lastDate+"，查询微服务"+source+"日志等级为"+category+"且操作为"+operation+"的网关日志");
+        return logService.find(startDate, endDate, source, category, operation);
     }
 }
 
