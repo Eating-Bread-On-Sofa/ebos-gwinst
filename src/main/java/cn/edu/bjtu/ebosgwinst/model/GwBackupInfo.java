@@ -13,9 +13,7 @@ public class GwBackupInfo {
         return command;
     }
 
-    public void setCommand(JSONArray command) {
-        this.command = command;
-    }
+    public void setCommand(JSONArray command) { this.command = command; }
 
     public JSONArray getEdgeXDevice() {
         return edgeXDevice;
