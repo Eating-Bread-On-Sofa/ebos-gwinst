@@ -47,7 +47,7 @@ public class GwInstController {
     private static final String edgeDeviceUrl = "http://localhost:48081/api/v1/device";
     private static final String edgeDeviceProfileUrl = "http://localhost:48081/api/v1/deviceprofile";
     private static final String edgeDeviceServiceUrl = "http://localhost:48081/api/v1/deviceservice";
-    private static final String edgeExportUrl = "http://192.168.81.141:48071/api/v1/registration";
+    private static final String edgeExportUrl = "http://localhost:48071/api/v1/registration";
     private static final String edgeCoreCommandPing = "http://localhost:48082/api/v1/ping";
     private static final String edgeCoreDataPing = "http://localhost:48080/api/v1/ping";
     private static final String edgeCoreMetaDataPing = "http://localhost:48081/api/v1/ping";
