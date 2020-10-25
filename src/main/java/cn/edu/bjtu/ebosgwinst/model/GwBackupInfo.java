@@ -13,7 +13,13 @@ public class GwBackupInfo {
         return command;
     }
 
+<<<<<<< HEAD
     public void setCommand(JSONArray command) { this.command = command; }
+=======
+    public void setCommand(JSONArray command) {
+        this.command = command;
+    }
+>>>>>>> 9ad2d6641e6e197fd89cfe25a2f1fb25345e4258
 
     public JSONArray getEdgeXDevice() {
         return edgeXDevice;

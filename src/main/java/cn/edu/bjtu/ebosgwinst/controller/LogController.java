@@ -51,7 +51,11 @@ public class LogController {
     @ApiOperation(value = "按条件筛选日志")
     @CrossOrigin
     @RequestMapping(value = "/log",method = RequestMethod.GET)
+<<<<<<< HEAD
     public List<Log> getLog(@PathVariable Date firstDate, @PathVariable Date lastDate, @PathVariable String source, @PathVariable String category, @PathVariable String operation) throws ParseException {
+=======
+    public List<Log> getLog(Date firstDate, Date lastDate, String source, String category, String operation) throws ParseException {
+>>>>>>> 9ad2d6641e6e197fd89cfe25a2f1fb25345e4258
         SimpleDateFormat df =  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SimpleDateFormat ds =  new SimpleDateFormat("yyyy-MM-dd ");
         Date startDate = df.parse(ds.format(firstDate)+"00:00:00");

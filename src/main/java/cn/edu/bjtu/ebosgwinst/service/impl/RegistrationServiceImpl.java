@@ -16,7 +16,11 @@ public class RegistrationServiceImpl implements RegistrationService {
     @Autowired
     LogService logService;
 
+<<<<<<< HEAD
     private static String url = "http://localhost:48071/api/v1/registration";
+=======
+    private static String url = "http://192.168.81.141:48071/api/v1/registration";
+>>>>>>> 9ad2d6641e6e197fd89cfe25a2f1fb25345e4258
 
     @Override
     public String registration(Registration registration) {
