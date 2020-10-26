@@ -92,7 +92,7 @@ public class FileServiceImpl implements FileService {
     public void execJar(String name){
         new Thread(() -> {
             try {
-                String[] commands = {"java", "-Xmx100m", "-Xss256k", "-jar", name};
+                String[] commands = {"/usr/local/java/jdk1.8.0_261/bin/java", "-Xmx100m", "-Xss256k", "-jar", name};
                 Process process = Runtime.getRuntime().exec(commands,null,new File(getThisJarPath()));
                 InputStream inputStream = process.getInputStream();
                 InputStream inputStream1 = process.getErrorStream();
