@@ -59,7 +59,7 @@ public class FileServiceImpl implements FileService {
     public List<FileDescriptor> getFileList(String path, String[] extensions){
         List<FileDescriptor> fileDescriptors = new LinkedList<>();
         File dir = new File(path);
-        Iterator<File> fileIterator = FileUtils.iterateFiles(dir,extensions,true);
+        Iterator<File> fileIterator = FileUtils.iterateFiles(dir,extensions,false);
         while (fileIterator.hasNext()){
             File file = fileIterator.next();
             FileDescriptor fileDescriptor = new FileDescriptor(file.getName(),FilenameUtils.getExtension(file.getName()));
@@ -67,6 +67,54 @@ public class FileServiceImpl implements FileService {
         }
         return fileDescriptors;
     }
+//
+//    public List<FileDescriptor> translate(List<FileDescriptor> files){
+//        for(FileDescriptor file : files){
+//            if(file.getName().equals("ebos-commandconfig.jar")){
+//                file.setName("指令管理");
+//            }
+//            if(file.getName().equals("ebos-command.jar")){
+//                file.setName("网关指令");
+//            }
+//            if(file.getName().equals("ebos-gatewayconfig.jar")){
+//                file.setName("设备管理");
+//            }
+//            if(file.getName().equals("ebos-gwinst.jar")){
+//                file.setName("网关管理");
+//            }
+//            if(file.getName().equals("ebos-gatewaymodify.jar")){
+//                file.setName("网关配置");
+//            }
+//            if(file.getName().equals("ebos-gwinst.jar")){
+//                file.setName("网关实例");
+//            }
+//            if(file.getName().equals("ebos-mqrouter.jar")){
+//                file.setName("消息路由");
+//            }
+//            if(file.getName().equals("ebos-oam.jar")){
+//                file.setName("运维监控");
+//            }
+//            if(file.getName().equals("ebos-profile.jar")){
+//                file.setName("模板管理");
+//            }
+//            if(file.getName().equals("ebos-rule.jar")){
+//                file.setName("规则引擎");
+//            }
+//            if(file.getName().equals("ebos-ruleselect.jar")){
+//                file.setName("规则管理");
+//            }
+//            if(file.getName().equals("ebos-scenario.jar")){
+//                file.setName("场景管理");
+//            }
+//            if(file.getName().equals("ebos-servmgmt.jar")){
+//                file.setName("服务管理");
+//            }
+//            if(file.getName().equals("ebos-user.jar")){
+//                file.setName("用户管理");
+//            }
+//        }
+//        return files;
+//    }
 
     @Override
     public List<FileSavingMsg> sendFiles(String url, String path, String[] names){
