@@ -27,6 +27,7 @@ spring:
 server:
   edgex: localhost
   port: 8090
+docker: localhost
 mq: activemq
 export:
   name: gw inst export

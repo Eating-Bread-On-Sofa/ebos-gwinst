@@ -5,6 +5,7 @@ import cn.edu.bjtu.ebosgwinst.service.LogService;
 import cn.edu.bjtu.ebosgwinst.service.RegistrationService;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,8 +16,10 @@ public class RegistrationServiceImpl implements RegistrationService {
     RestTemplate restTemplate;
     @Autowired
     LogService logService;
+    @Value("${docker}")
+    private static String ip ;
 
-    private static String url = "http://localhost:48071/api/v1/registration";
+    private static String url = "http://"+ip+":48071/api/v1/registration";
 
     @Override
     public String registration(Registration registration) {

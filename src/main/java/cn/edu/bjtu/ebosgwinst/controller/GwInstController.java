@@ -11,6 +11,7 @@ import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
@@ -39,18 +40,21 @@ public class GwInstController {
     MqFactory mqFactory;
     @Autowired
     RegistrationService registrationService;
+    @Value("${docker}")
+    private static String ip ;
 
     public static final List<RawSubscribe> status = new LinkedList<>();
     private ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 50,3, TimeUnit.SECONDS,new SynchronousQueue<>());
 
+
     private static final String commandUrl = "http://localhost:8082/api/command";
-    private static final String edgeDeviceUrl = "http://localhost:48081/api/v1/device";
-    private static final String edgeDeviceProfileUrl = "http://localhost:48081/api/v1/deviceprofile";
-    private static final String edgeDeviceServiceUrl = "http://localhost:48081/api/v1/deviceservice";
-    private static final String edgeExportUrl = "http://localhost:48071/api/v1/registration";
-    private static final String edgeCoreCommandPing = "http://localhost:48082/api/v1/ping";
-    private static final String edgeCoreDataPing = "http://localhost:48080/api/v1/ping";
-    private static final String edgeCoreMetaDataPing = "http://localhost:48081/api/v1/ping";
+    private static final String edgeDeviceUrl = "http://"+ip+":48081/api/v1/device";
+    private static final String edgeDeviceProfileUrl = "http://"+ip+":48081/api/v1/deviceprofile";
+    private static final String edgeDeviceServiceUrl = "http://"+ip+":48081/api/v1/deviceservice";
+    private static final String edgeExportUrl = "http://"+ip+":48071/api/v1/registration";
+    private static final String edgeCoreCommandPing = "http://"+ip+":48082/api/v1/ping";
+    private static final String edgeCoreDataPing = "http://"+ip+":48080/api/v1/ping";
+    private static final String edgeCoreMetaDataPing = "http://"+ip+":48081/api/v1/ping";
 
     @ApiOperation(value = "从网关备份数据", notes = "每项字段具体内容，请参考相应微服务或edgex")
     @CrossOrigin

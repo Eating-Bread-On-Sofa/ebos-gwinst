@@ -31,7 +31,10 @@ public class Init implements ApplicationRunner {
     RestTemplate restTemplate;
     @Autowired
     LogService logService;
-    private String url = "http://localhost:48071/api/v1/registration";
+    @Value("${docker}")
+    private static String docker ;
+
+    private String url = "http://"+docker+":48071/api/v1/registration";
 
     @Override
     public void run(ApplicationArguments arguments) {
