@@ -21,5 +21,4 @@ public class EbosGwinstApplication {
         RestTemplate restTemplate = new RestTemplate(simpleClientHttpRequestFactory);
         return restTemplate;
     }
-
 }
